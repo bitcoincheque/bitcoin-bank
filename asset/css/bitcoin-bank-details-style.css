@@ -1,0 +1,42 @@
+span.bitcoin-bank-cheque-not-set
+{
+    color: black;
+    background-color: lightgrey;
+}
+
+span.bitcoin-bank-cheque-unclaimed
+{
+    color: grey;
+    background-color: yellow;
+}
+
+span.bitcoin-bank-cheque-claimed
+{
+    color: green;
+    background-color: greenyellow;
+}
+
+span.bitcoin-bank-cheque-cashed
+{
+    color: blue;
+    background-color: lightblue;
+}
+
+span.bitcoin-bank-cheque-expired
+{
+    color: red;
+    background-color: #ffcccc;
+}
+
+span.bitcoin-bank-cheque-rejected
+{
+    color: blue;
+    background-color: lightblue;
+}
+
+#BCQ_BitcoinBank_Cheque_Create_Controller span.bitcoin_bank_bitcoin_currency,
+#BCQ_BitcoinBank_Account_List_Controller  span.bitcoin_bank_bitcoin_currency,
+#BCQ_BitcoinBank_Account_Header_Controller span.bitcoin_bank_bitcoin_currency
+{
+    font-weight: bold;
+}

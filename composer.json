@@ -1,0 +1,18 @@
+{
+  "require": {
+    "wppluginframework/wp-plugin-framework": "@dev"
+  },
+  "require-dev": {
+    "dealerdirect/phpcodesniffer-composer-installer": "*",
+    "phpcompatibility/phpcompatibility-wp": "*",
+    "wp-coding-standards/wpcs": "*"
+  },
+  "scripts": {
+    "phpcs": [
+      "C:/sandbox/htdocs/plugins/bitcoin-bank/vendor/bin/phpcs --standard=phpcs.ruleset.xml"
+    ],
+    "phpcbf": [
+      "C:/sandbox/htdocs/plugins/bitcoin-bank/vendor/bin/phpcbf  --standard=phpcs.ruleset.xml"
+    ]
+  }
+}

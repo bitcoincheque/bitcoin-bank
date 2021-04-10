@@ -1,0 +1,66 @@
+.bcq_from_in_post{
+    background-color: #f5f5f5;
+    padding: 15px 15px 15px 15px;
+}
+
+div.bcq_design_studio{
+    vertical-align: top;
+    min-height: 1000px;
+}
+
+div.bcq_wizard_placeholder{
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+div.bcq_wizard_tools{
+    max-width: 700px;
+    position: relative;
+    overflow: auto;
+    margin: 16px 0;
+    padding: 10px 10px 10px 10px;
+    border: 1px solid #d5d5d5;
+    box-shadow: 5px 5px 5px rgba(0,0,0,.04);
+    background: #e6f5ff;
+    font-size: 13px;
+}
+
+div.bcq_wizard_tools td{
+    vertical-align: top;
+}
+
+div.bcq_wizard_tools hr {
+    border: 0;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #d5d5d5;
+}
+
+div.bcq_wizard_tools img {
+    border: 1px solid #d5d5d5;
+}
+
+div.bcq_wizard_texts{
+    padding: 0 0 0 10px;
+    vertical-align: top;
+}
+
+div.bcq_wizard_texts h2{
+    margin: 3px 0 0 0;
+}
+
+div.bcq_wizard_buttons{
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+table.bcq_admin_table, table.bcq_admin_table td, table.bcq_admin_table th{
+    padding: 5px;
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+
+img.bitcoin-bank-cheque-placeholder {
+    border: 1px solid black;
+}
