@@ -132,30 +132,6 @@ class Cheque_Create_View extends Std_View {
         }
 
 
-/*
-        $grid = new Grid(null, array('class' => 'form-table'));
-
-        $grid->add_row();
-        $grid->add_cell_header( new Label( 'Send to e-mail address:', array( 'for' => 'email' )) );
-        $grid->add_cell( array(
-            $this->email,
-        ));
-
-        $grid->add_row();
-        $grid->add_cell_header( new Label( 'Amount:', array( 'for' => 'amount' )) );
-        $grid->add_cell( $this->amount );
-
-        $grid->add_row();
-        $grid->add_cell_header( new Label( 'Memo:', array( 'for' => 'memo' )) );
-        $grid->add_cell( $this->memo );
-
-        $grid->add_row();
-        $grid->add_cell_header( new Label( 'Expire time:', array( 'for' => 'expire' )) );
-        $grid->add_cell( $this->expire );
-
-        $this->add_content($grid);
-*/
-
         $p_info = new P('Send cheque by e-mail. The recipient does not need bank account in advance.');
         $this->add_content($p_info);
 
