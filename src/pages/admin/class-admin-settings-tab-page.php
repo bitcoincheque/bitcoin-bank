@@ -54,6 +54,18 @@ class Admin_Settings_Tab_Page extends Admin_Tab_Page {
                 'headline' => esc_html__( 'Currency settings', 'bitcoin-bank' ),
                 'link' => admin_url() . 'admin.php?page=bcq-admin-settings&tab=currency',
             ),
+            'client' => array(
+                'name' => 'client',
+                'text' => esc_html__( 'Clients', 'bitcoin-bank' ),
+                'headline' => esc_html__( 'Client settings', 'bitcoin-bank' ),
+                'link' => admin_url() . 'admin.php?page=bcq-admin-settings&tab=client',
+            ),
+            'account' => array(
+                'name' => 'account',
+                'text' => esc_html__( 'Accounts', 'bitcoin-bank' ),
+                'headline' => esc_html__( 'Account settings', 'bitcoin-bank' ),
+                'link' => admin_url() . 'admin.php?page=bcq-admin-settings&tab=account',
+            ),
             /* translators: Admin tab menu. Limited space, keep translation short. */
             'email' => array(
                 'name' => 'email',
@@ -104,6 +116,14 @@ class Admin_Settings_Tab_Page extends Admin_Tab_Page {
 
             case 'currency':
                 $controller = new Admin_Settings_Currency_Controller();
+                break;
+
+            case 'client':
+                $controller = new Admin_Settings_Client_Controller();
+                break;
+
+            case 'account':
+                $controller = new Admin_Settings_Account_Controller();
                 break;
 
             case 'linking':
