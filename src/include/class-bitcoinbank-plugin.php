@@ -131,7 +131,7 @@ class Bitcoin_Bank_Plugin extends WP_PluginFramework\Plugin_Container {
         } else {
             add_action('rest_api_init', array(new Rest_Money_Account_Api_Accounts, 'register_routes'));
             add_action('rest_api_init', array(new Rest_Money_Account_Api_Issued_Cheques, 'register_routes'));
-            //add_action( 'rest_api_init', array( new Rest_Money_Account_Api_Info(), 'info' ) );
+            add_action('rest_api_init', array(new Rest_Money_Account_Api_Info(), 'register_routes' ) );
             add_action('rest_api_init', array(new Rest_Money_Account_Api_Public_Keys, 'register_routes'));
             add_action('rest_api_init', array(new Rest_Money_Account_Api_Transactions, 'register_routes'));
 

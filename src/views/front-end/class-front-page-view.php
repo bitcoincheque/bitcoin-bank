@@ -84,7 +84,7 @@ class Front_Page_View extends Std_View {
 		$html_text = sprintf( esc_html__( 'Yes, I accept the %s.', 'bitcoin-bank' ), $terms_href );
 
 		$html_content = new Html_Text( $html_text );
-		$checkbox     = new Check_Box( $html_content, 0, 'terms' );
+		$checkbox     = new Check_Box( $html_content, 0, 'accept_terms' );
 		return $checkbox;
 	}
 }

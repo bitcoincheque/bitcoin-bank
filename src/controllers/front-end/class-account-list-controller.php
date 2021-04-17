@@ -63,6 +63,7 @@ class Account_List_Controller extends Front_Page_Std_Controller {
 
                 $link_options = new Settings_Linking_Options();
                 $transaction_page = $link_options->get_complete_link_url(Settings_Linking_Options::TRANSACTION_PAGE);
+                $total_balance = 0;
                 foreach ($values['data_objects'] as $idx => $data_obj)
                 {
                     $balance = $data_obj[Accounts_Db_Table::BALANCE];
@@ -74,7 +75,22 @@ class Account_List_Controller extends Front_Page_Std_Controller {
                     $url = $transaction_page . '?account_id=' . $account_id;
                     $a = new A('Transactions', $url);
                     $values['data_objects'][$idx]['links'] = $a;
+
+                    $total_balance += $balance->get_value();
                 }
+
+                $total_balance_obj = new Crypto_Currency_Type(null, null, $total_balance);
+                $fiat_balance_obj = clone $total_balance_obj;
+                $fiat_balance_obj->set_property('alternative_currency', true);
+
+                $total_balance_line = array(
+                    'id' => '',
+                    'label' => 'Total balance:',
+                    'balance' => $total_balance_obj,
+                    'fiat' => $fiat_balance_obj,
+                    'links' => ''
+                );
+                array_push($values['data_objects'], $total_balance_line);
 
                 $values['meta_data'] = $this->model->get_meta_data_list($columns);
                 $values['meta_data']['fiat'] =  array('label' => 'Fiat value');

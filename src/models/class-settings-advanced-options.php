@@ -49,14 +49,17 @@ class Settings_Advanced_Options extends Option_Model {
 		self::UNINSTALL_KEEP_DB_DATA     => array(
 			'data_type'     => 'Boolean_Type',
 			'default_value' => '0',
+            'legend'        => 'Yes'
 		),
 		self::ENABLE_DEBUG_LOG           => array(
 			'data_type'     => 'Boolean_Type',
 			'default_value' => '0',
+            'legend'        => 'Yes'
 		),
 		self::ENABLE_EXTRA_DEBUG_LOGGING => array(
 			'data_type'     => 'Boolean_Type',
 			'default_value' => '0',
+            'legend'        => 'Yes'
 		),
 		self::LICENSE_KEY => array(
 			'data_type'     => 'String_Type',
@@ -64,15 +67,18 @@ class Settings_Advanced_Options extends Option_Model {
 		),
         self::DOWNLOAD_RC_VERSIONS => array(
             'data_type'     =>  'Boolean_Type',
-            'default_value' => '0'
+            'default_value' => '0',
+            'legend'        => 'Yes'
         ),
         self::DOWNLOAD_BETA_VERSIONS => array(
             'data_type'     =>  'Boolean_Type',
-            'default_value' => '0'
+            'default_value' => '0',
+            'legend'        => 'Yes'
 		),
         self::DOWNLOAD_DEV_VERSIONS => array(
             'data_type'     =>  'Boolean_Type',
-            'default_value' => '0'
+            'default_value' => '0',
+            'legend'        => 'Yes'
 		)
 	);
 }
