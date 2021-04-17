@@ -25,7 +25,7 @@
 Plugin Name: Bitcoin Bank
 Plugin URI: https://www.bitcoindemobank.com
 Description: Bitcoin Bank.
-Version: 0.0.20
+Version: 0.0.21
 Author: Arild Hegvik
 License: GNU GPLv3
 License URI: license.txt
