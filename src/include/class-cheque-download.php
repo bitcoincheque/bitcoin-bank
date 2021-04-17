@@ -37,6 +37,7 @@ class Cheque_Download {
         $im = imagecreatefrompng($filename);
 
         $black = imagecolorallocate($im, 0, 0, 0);
+        $red_ink = imagecolorallocate($im, 255, 0, 0);
 
         //imagestring($im, 10, 20, 20, get_bloginfo(), $black);
         //imagestring($im, 10, 20, 40, get_site_url(), $black);
@@ -60,6 +61,8 @@ class Cheque_Download {
         imagestring($im, 10, 520, 190, 'Expire time: ' . $expire_time, $black);
 
         imagestring($im, 10, 20, 275, 'Cheque S/N: ' . $cheque_no . '  Access Code: ' . $access_code . '  Hash:' . $hash, $black);
+
+        imagestring($im, 14, 240, 230, 'NOT VALID - ONLY FOR DEMONSTRATION', $red_ink);
 
         imagepng($im);
 
