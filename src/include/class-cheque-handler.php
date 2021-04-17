@@ -39,7 +39,7 @@ class Cheque_Handler {
     }
 
     static public function get_cheque_fee() {
-        return 1000;
+        return 100;
     }
 
     static public function check_expired() {

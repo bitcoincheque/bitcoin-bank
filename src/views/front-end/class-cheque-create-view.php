@@ -72,8 +72,6 @@ class Cheque_Create_View extends Std_View {
         $this->amount = new text_Line( esc_html__( 'Amount:', 'bitcoin-bank' ), '', 'amount' );
         $this->memo = new text_Line( esc_html__( 'Memo:', 'bitcoin-bank' ), '', 'memo' );
         $expire_options = array(
-            'five_minutes' => '5 minutes',
-            'thirty_minutes' => '30 minutes',
             'one_hour' => '1 hour',
             'two_hour' => '2 hours',
             'tree_hour' => '3 hours',
@@ -131,13 +129,12 @@ class Cheque_Create_View extends Std_View {
             $this->add_content($p1);
         }
 
-
-        $p_info = new P('Send cheque by e-mail. The recipient does not need bank account in advance.');
+        $p_info = new P('Send cheque by e-mail. The recipient does not need bank account in advance, and will receive an e-mail with a picture of the cheque and link to sign up a bank client in order to cash the cheque.');
         $this->add_content($p_info);
 
         $this->add_form_input( 'email', $this->email, 'E-mail:', 'Only this recipient can cash the cheque.' );
-        $this->add_form_input( 'amount', $this->amount, 'Amount:', 'In Bitcoins. Comma separated number.' );
-        $this->add_form_input( 'memo',  $this->memo, 'Memo:', 'Option information written on the cheque.');
+        $this->add_form_input( 'amount', $this->amount, 'Amount:', 'Amount to send in bitcoins.' );
+        $this->add_form_input( 'memo',  $this->memo, 'Memo:', 'Optional note written on the cheque.');
         $this->add_form_input( 'expire',  $this->expire, 'Expires after:');
 
         $this->add_button('button_create_cheque', $this->button_create_cheque);

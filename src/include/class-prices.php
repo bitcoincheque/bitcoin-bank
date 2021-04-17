@@ -10,7 +10,7 @@ class Prices {
 
     static public function calculate_cheque_fee($client_id, $account_id, $cheque) {
         $fee = new Crypto_currency_type(null, null );
-        $fee->set_value(1500); /* Satoshi */
+        $fee->set_value(100); /* Satoshi */
         $fee->set_unit('BTC');
         return $fee;
     }
