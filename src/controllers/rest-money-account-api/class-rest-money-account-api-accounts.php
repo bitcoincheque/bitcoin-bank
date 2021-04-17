@@ -23,7 +23,7 @@ class Rest_Money_Account_Api_Accounts extends Rest_Money_Account_Api
     public function register_routes($route = null, $methods=array())
     {
         parent::register_routes('/accounts', array(
-            self::METHOD_GET => array(),
+            self::METHOD_GET_MANY => array(),
             self::METHOD_GET_ID => array()
         ));
     }
@@ -93,6 +93,16 @@ class Rest_Money_Account_Api_Accounts extends Rest_Money_Account_Api
     }
 
     public function get_schema() {
+        $schema = $this->get_account_schema();
+        return $schema;
+    }
+
+    public function get_schema_for_id_endpoint() {
+        $schema = $this->get_account_schema();
+        return $schema;
+    }
+
+    public function get_account_schema() {
         $schema = array(
             '$schema' => 'http://json-schema.org/draft-04/schema#',
             'title' => 'account',

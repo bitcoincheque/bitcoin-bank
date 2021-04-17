@@ -27,7 +27,7 @@ class Rest_Money_Account_Api_Public_Keys extends Rest_Money_Account_Api
         register_rest_route($this->name_space, $route, array(
             array(
                 'methods' => \WP_REST_Server::READABLE,
-                'callback' => array($this, 'endpoint_get')
+                'callback' => array($this, 'endpoint_get_many')
             ),
             'schema' => array($this, 'get_schema')
         ));
@@ -51,7 +51,7 @@ class Rest_Money_Account_Api_Public_Keys extends Rest_Money_Account_Api
         return self::FIELD_PUBLIC_KEY_ID;
     }
 
-    public function endpoint_get_read_database ($request, $query_parameters) {
+    public function endpoint_get_many_read_data ($request, $query_parameters) {
         $fields = array(
             Certificates::PRIMARY_KEY,
             Certificates::CREATED_TIME,
@@ -61,7 +61,7 @@ class Rest_Money_Account_Api_Public_Keys extends Rest_Money_Account_Api
             Certificates::BIT_LENGTH
         );
         $query_parameters->filter_fields($fields);
-        return parent::endpoint_get_read_database($request, $query_parameters);
+        return parent::endpoint_get_many_read_data($request, $query_parameters);
     }
 
     public function endpoint_get_single_read_database ($request, $query_parameters) {

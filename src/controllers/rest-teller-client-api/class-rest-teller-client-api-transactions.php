@@ -14,7 +14,7 @@ class Rest_Teller_Client_API_Transactions extends Rest_Teller_Client_API
     public function register_routes($route = null, $methods=array())
     {
         parent::register_routes('/transactions', array(
-            self::METHOD_GET => array(),
+            self::METHOD_GET_MANY => array(),
             self::METHOD_GET_ID => array()
         ));
     }

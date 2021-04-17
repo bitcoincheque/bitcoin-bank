@@ -27,7 +27,7 @@ class Rest_Money_Account_Api_Received_Cheques extends Rest_Money_Account_Api_Che
     public function register_routes($route = null, $methods=array())
     {
         parent::register_routes('/received-cheques', array(
-            self::METHOD_GET => array(),
+            self::METHOD_GET_MANY => array(),
             self::METHOD_GET_ID => array()
         ));
     }
@@ -36,10 +36,10 @@ class Rest_Money_Account_Api_Received_Cheques extends Rest_Money_Account_Api_Che
         return self::CHEQUE_ID;
     }
 
-    public function endpoint_get_read_database($request, $query_parameters) {
+    public function endpoint_get_many_read_data($request, $query_parameters) {
         $client_id = $this->get_authorised_client_id();
         $query_parameters->add_filter(Cheque_Db_Table::SENDER_CLIENT_ID, $client_id);
-        return parent::endpoint_get_read_database($request, $query_parameters);
+        return parent::endpoint_get_many_read_data($request, $query_parameters);
     }
 
     public function endpoint_get_single_read_database($request, $query_parameters) {

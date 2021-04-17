@@ -14,7 +14,7 @@ class Rest_Money_Account_Api_Transactions extends Rest_Money_Account_Api
     public function register_routes($route = null, $methods=array())
     {
         parent::register_routes('/transactions', array(
-            self::METHOD_GET => array(),
+            self::METHOD_GET_MANY => array(),
             self::METHOD_GET_ID => array()
         ));
     }
