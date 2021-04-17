@@ -28,9 +28,10 @@ defined('ABSPATH') || exit;
 use WP_PluginFramework\DataTypes\Currency_Type;
 use WP_PluginFramework\HtmlElements\A;
 use WP_PluginFramework\HtmlElements\Span;
+use WP_PluginFramework\Utils\Debug_Logger;
 use WP_PluginFramework\Utils\Security_Filter;
 
-class Crypto_currency_type extends Currency_Type {
+class Crypto_Currency_Type extends Currency_Type {
 
     protected $debit_credit_type = false;
     protected $alternative_currency = false;
@@ -97,10 +98,9 @@ class Crypto_currency_type extends Currency_Type {
         return $value;
     }
 
-    public function get_formatted_text()
-    {
+    public function convert_value_to_str($value, $show_unit=false) {
         $decimal_point = Settings_Currency_Options::get_options(Settings_Currency_Options::DECIMAL_POINT);
-        switch($decimal_point) {
+        switch ($decimal_point) {
             case '.':
                 $thousands_point = ',';
                 break;
@@ -113,22 +113,18 @@ class Crypto_currency_type extends Currency_Type {
                 break;
         }
 
-        $value = $this->get_value();
-
-        if($this->alternative_currency)
-        {
+        if ($this->alternative_currency) {
             $currency_unit = Settings_Currency_Options::get_options(Settings_Currency_Options::ALTERNATE_CURRENCY);
             $decimals = 2;
             $prefix = '';
 
-            if($this->alternative_currency) {
+            if ($this->alternative_currency) {
                 $value /= 100000000;
                 $currency_exchange_rate = Crypto_Exchange_Price::get_currency_exchange_rate('BTC', $currency_unit);
-                if($currency_exchange_rate == false) {
+                if ($currency_exchange_rate == false) {
                     $currency_unit = 'USD';
                     $currency_exchange_rate = Crypto_Exchange_Price::get_currency_exchange_rate('BTC', $currency_unit);
-                    if($currency_exchange_rate == false)
-                    {
+                    if ($currency_exchange_rate == false) {
                         return 'No exchange rate';
                     }
                 }
@@ -137,11 +133,10 @@ class Crypto_currency_type extends Currency_Type {
                 $value = intval($value);
             }
         }
-        else
-        {
+        else {
             $currency_unit = Settings_Currency_Options::get_options(Settings_Currency_Options::CURRENCY_UNIT);
             $currency_unit_position = Security_Filter::safe_read_get_request('currency_unit', Security_Filter::STRING_KEY_NAME);
-            switch($currency_unit_position) {
+            switch ($currency_unit_position) {
                 case 'btc':
                     $decimals = 8;
                     $prefix = '';
@@ -172,20 +167,17 @@ class Crypto_currency_type extends Currency_Type {
         $currency_string = strval($value);
 
         $negative = false;
-        if ($currency_string[0] === '-')
-        {
+        if ($currency_string[0] === '-') {
             $negative = true;
             $currency_string = substr($currency_string, 1);
         }
 
         $length = strlen($currency_string);
-        if ($length > $decimals)
-        {
+        if ($length > $decimals) {
             $integer_part = substr($currency_string, 0, $length - $decimals);
             $fractional_part = substr($currency_string, -$decimals, $decimals);
         }
-        else
-        {
+        else {
             $integer_part = '0';
             $fractional_part = str_repeat('0', $decimals - $length) . $currency_string;
         }
@@ -193,56 +185,84 @@ class Crypto_currency_type extends Currency_Type {
         $integer_part = strrev($integer_part);
         $integer_part_split = chunk_split($integer_part, 3, $thousands_point);
         $integer_part_formatted = strrev($integer_part_split);
-        if($integer_part_formatted[0] == $thousands_point)
-        {
+        if ($integer_part_formatted[0] == $thousands_point) {
             $integer_part_formatted = substr($integer_part_formatted, 1);
         }
 
         $fractional_part_formatted = chunk_split($fractional_part, 3, $thousands_point);
         $n = strlen($fractional_part_formatted);
-        if($fractional_part_formatted[$n-1] == $thousands_point)
-        {
-            $fractional_part_formatted = substr($fractional_part_formatted, 0, $n-1 );
+        if ($fractional_part_formatted[$n - 1] == $thousands_point) {
+            $fractional_part_formatted = substr($fractional_part_formatted, 0, $n - 1);
         }
 
-        if ($this->debit_credit_type === Account_Chart_Db_Table::CREDIT_ACCOUNT)
-        {
-            $negative = !$negative;
+        if(is_admin()) {
+            $credit_as_negative = Settings_Account_Options::get_options(Settings_Account_Options::SHOW_CREDIT_ACCOUNTS_NEGATIVE);
+            if(!$credit_as_negative) {
+                if (!isset($this->transaction_data)) {
+                    if ($this->debit_credit_type === Account_Chart_Db_Table::CREDIT_ACCOUNT) {
+                        $negative = !$negative;
+                    }
+                }
+            }
+        } else {
+            if(!isset($this->transaction_data)) {
+                $negative = !$negative;
+            }
         }
 
         $negative_sign = '';
-        if ($negative)
-        {
-            if ($this->value !== 0)
-            {
+        if ($negative) {
+            if ($this->value !== 0) {
                 $negative_sign = '-';
             }
         }
-        else
-        {
+        else {
             $negative_sign = '';
         }
 
-        if ($currency_unit)
-        {
+        if ($currency_unit) {
             $currency_unit .= ' ';
         }
 
-        if($decimals == 0) {
+        if ($decimals == 0) {
             $decimal_point = '';
         }
 
-        $text = $currency_unit . $negative_sign . $integer_part_formatted . $decimal_point . $fractional_part_formatted . $prefix;
+        $text = '';
+        if ($show_unit) {
+            $text .= $currency_unit;
+        }
+
+        $text .= $negative_sign . $integer_part_formatted . $decimal_point . $fractional_part_formatted . $prefix;
 
         return $text;
     }
 
-    public function get_value()
+    public function get_string() {
+        $value = $this->value;
+        return $this->convert_value_to_str($value, false);
+    }
+
+    public function get_formatted_text()
     {
-        $value = parent::get_value();
+        $value = $this->get_value();
+        return $this->convert_value_to_str($value, true);
+    }
 
+    public function set_value( $value ) {
+        switch ( gettype( $value ) ) {
+            case 'string':
+                $this->value = $this->convert_str_to_value( $value );
+                break;
 
-        return $value; // TODO: Change the autogenerated stub
+            case 'integer':
+                $this->value = $value;
+                break;
+
+            default:
+                Debug_Logger::write_debug_error( 'Unsupported data type ' . gettype( $value ) );
+                break;
+        }
     }
 
     public function create_content()

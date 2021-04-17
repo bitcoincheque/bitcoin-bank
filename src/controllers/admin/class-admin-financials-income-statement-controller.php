@@ -55,6 +55,10 @@ class Admin_Financials_Income_Statement_Controller extends Admin_Controller {
             Account_Chart_Db_Table::SUB_ACCOUNT_TYPE
         );
 
+        $credit_type_account_metadata = array(
+            'debit_credit_type' => Account_Chart_Db_Table::CREDIT_ACCOUNT
+        );
+
         $site_url = get_site_url();
         $account_page_url = $site_url . '/wp-admin/admin.php?page=bcq-admin-accounts&tab=accounts';
 
@@ -74,11 +78,11 @@ class Admin_Financials_Income_Statement_Controller extends Admin_Controller {
             $href = $account_page_url . '&sub_account=' . strval($sub_account_type);
             $a = new A($line_label, $href);
             $parameters['income_accounts'][$idx][Account_Chart_Db_Table::LABEL] = $a;
-            $parameters['income_accounts'][$idx][Account_Chart_Db_Table::GRAND_TOTALS] = new Crypto_currency_type(null, null, $account_data[Account_Chart_Db_Table::GRAND_TOTALS]);
+            $parameters['income_accounts'][$idx][Account_Chart_Db_Table::GRAND_TOTALS] = new Crypto_currency_type($credit_type_account_metadata, null, $account_data[Account_Chart_Db_Table::GRAND_TOTALS]);
             unset($parameters['income_accounts'][$idx][Account_Chart_Db_Table::MAIN_ACCOUNT_TYPE]);
             unset($parameters['income_accounts'][$idx][Account_Chart_Db_Table::SUB_ACCOUNT_TYPE]);
         }
-        $total_revenue_obj = new Crypto_currency_type(null, null, $total_revenue);
+        $total_revenue_obj = new Crypto_currency_type($credit_type_account_metadata, null, $total_revenue);
         $parameters['income_sum'] = array(array('', 'Sum Revenues', $total_revenue_obj));
 
         $total_expenses=0;
@@ -95,15 +99,15 @@ class Admin_Financials_Income_Statement_Controller extends Admin_Controller {
             $href = $account_page_url . '&sub_account=' . strval($sub_account_type);
             $a = new A($line_label, $href);
             $parameters['expense_accounts'][$idx][Account_Chart_Db_Table::LABEL] = $a;
-            $parameters['expense_accounts'][$idx][Account_Chart_Db_Table::GRAND_TOTALS] = new Crypto_currency_type(null, null, $account_data[Account_Chart_Db_Table::GRAND_TOTALS]);
+            $parameters['expense_accounts'][$idx][Account_Chart_Db_Table::GRAND_TOTALS] = new Crypto_currency_type($credit_type_account_metadata, null, $account_data[Account_Chart_Db_Table::GRAND_TOTALS]);
             unset($parameters['expense_accounts'][$idx][Account_Chart_Db_Table::MAIN_ACCOUNT_TYPE]);
             unset($parameters['expense_accounts'][$idx][Account_Chart_Db_Table::SUB_ACCOUNT_TYPE]);
         }
-        $total_expenses_obj = new Crypto_currency_type(null, null, $total_expenses);
+        $total_expenses_obj = new Crypto_currency_type($credit_type_account_metadata, null, $total_expenses);
         $parameters['expense_sum'] = array(array('', 'Sum Expenses', $total_expenses_obj));
 
         $protfit = $total_revenue + $total_expenses;
-        $protfit_obj = new Crypto_currency_type(null, null, $protfit);
+        $protfit_obj = new Crypto_currency_type($credit_type_account_metadata, null, $protfit);
         $parameters['profit'] = array(array('', 'Profit/Loss', $protfit_obj));
 
 

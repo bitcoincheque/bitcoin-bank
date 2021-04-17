@@ -77,7 +77,8 @@ class Transactions_Db_Table extends Active_Record
         self::AMOUNT => array(
             'data_type' => 'BCQ_BitcoinBank\Crypto_currency_type',
             'default_value' => 0,
-            'label' => 'Amount'
+            'label' => 'Amount',
+            'transaction_data' => true
         ),
 		self::TRANSACTION_TYPE => array(
 			'data_type' => 'BCQ_BitcoinBank\Transaction_Type',

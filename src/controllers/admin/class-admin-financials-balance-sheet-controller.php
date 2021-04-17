@@ -55,6 +55,10 @@ class Admin_Financials_Balance_Sheet_Controller extends Admin_Controller {
             Account_Chart_Db_Table::SUB_ACCOUNT_TYPE
         );
 
+        $credit_type_account_metadata = array(
+            'debit_credit_type' => Account_Chart_Db_Table::CREDIT_ACCOUNT
+        );
+
         $site_url = get_site_url();
         $account_page_url = $site_url . '/wp-admin/admin.php?page=bcq-admin-accounts&tab=accounts';
         $income_page_url = $site_url . '/wp-admin/admin.php?page=bcq-admin-financials&tab=income';
@@ -97,11 +101,12 @@ class Admin_Financials_Balance_Sheet_Controller extends Admin_Controller {
             $a = new A($line_label, $href);
             $parameters['liabilities_accounts'][$idx][Account_Chart_Db_Table::LABEL] = $a;
             $total_liabilities += $account_data[Account_Chart_Db_Table::GRAND_TOTALS];
-            $parameters['liabilities_accounts'][$idx][Account_Chart_Db_Table::GRAND_TOTALS] = new Crypto_currency_type(null, null, $account_data[Account_Chart_Db_Table::GRAND_TOTALS]);
+            $parameters['liabilities_accounts'][$idx][Account_Chart_Db_Table::GRAND_TOTALS] = new Crypto_currency_type($credit_type_account_metadata, null, $account_data[Account_Chart_Db_Table::GRAND_TOTALS]);
             unset($parameters['liabilities_accounts'][$idx][Account_Chart_Db_Table::MAIN_ACCOUNT_TYPE]);
             unset($parameters['liabilities_accounts'][$idx][Account_Chart_Db_Table::SUB_ACCOUNT_TYPE]);
         }
-        $total_liabilities_obj = new Crypto_currency_type(null, null, $total_liabilities);
+
+        $total_liabilities_obj = new Crypto_currency_type($credit_type_account_metadata, null, $total_liabilities);
         $parameters['liabilities_totals'] = array(array('', 'Total Liabilities', $total_liabilities_obj));
 
 
@@ -143,14 +148,14 @@ class Admin_Financials_Balance_Sheet_Controller extends Admin_Controller {
             $a = new A($line_label, $income_page_url);
             $parameters['equity_accounts'][$idx][Account_Chart_Db_Table::LABEL] = $a;
             $total_equity += $account_data[Account_Chart_Db_Table::GRAND_TOTALS];
-            $parameters['equity_accounts'][$idx][Account_Chart_Db_Table::GRAND_TOTALS] = new Crypto_currency_type(null, null, $account_data[Account_Chart_Db_Table::GRAND_TOTALS]);
+            $parameters['equity_accounts'][$idx][Account_Chart_Db_Table::GRAND_TOTALS] = new Crypto_currency_type($credit_type_account_metadata, null, $account_data[Account_Chart_Db_Table::GRAND_TOTALS]);
             unset($parameters['equity_accounts'][$idx][Account_Chart_Db_Table::MAIN_ACCOUNT_TYPE]);
             unset($parameters['equity_accounts'][$idx][Account_Chart_Db_Table::SUB_ACCOUNT_TYPE]);
         }
-        $total_equity_obj = new Crypto_currency_type(null, null, $total_equity);
+        $total_equity_obj = new Crypto_currency_type($credit_type_account_metadata, null, $total_equity);
         $parameters['equity_totals'] = array(array('', 'Total Equity', $total_equity_obj));
 
-        $total_obj = new Crypto_currency_type(null, null, $total_liabilities + $total_equity);
+        $total_obj = new Crypto_currency_type($credit_type_account_metadata, null, $total_liabilities + $total_equity);
         $parameters['total_balance'] = array(array('', 'Total Liabilities and Equity', $total_obj));
 
 
