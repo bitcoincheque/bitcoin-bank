@@ -203,7 +203,7 @@ class Account_Chart_Db_Table extends Active_Record
                 break;
 
             default:
-                Debug_Logger::write_debug_error('Missing account type definitions for ', $account_type );
+                Debug_Logger::write_debug_error('Missing account type definitions for ', $account_chart_type );
                 break;
         }
 
