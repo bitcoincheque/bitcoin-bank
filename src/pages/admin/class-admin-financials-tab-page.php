@@ -52,11 +52,13 @@ class Admin_Financials_Tab_Page extends Admin_Tab_Page {
                 'link' => admin_url() . 'admin.php?page=bcq-admin-menu&tab=income',
             ),
             /* translators: Admin tab menu. Limited space, keep translation short. */
+            /*
             'cash_flow' => array(
                 'text' => esc_html__( 'Cash Flow', 'bitcoin-bank' ),
                 'headline' => esc_html__( 'Cash Flow', 'bitcoin-bank' ),
                 'link' => admin_url() . 'admin.php?page=bcq-admin-menu&tab=cash_flow',
             )
+            */
         );
 
         parent::__construct( $nav_tabs, $name, $content );
