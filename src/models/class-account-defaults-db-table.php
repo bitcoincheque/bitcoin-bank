@@ -45,6 +45,9 @@ class Account_Defaults_Db_Table extends Active_Record
     const ACCOUNT_CHART_ID = 'chart_account_id';
     const DESCRIPTION = 'description';
 
+    const DEFAULT_NEW_CLIENT_SAVING_ACCOUNT = 'new_client_saving_account';
+    const DEFAULT_NEW_CLIENT_CREDIT_ACCOUNT = 'new_client_credit_account';
+
     /* Metadata describing database fields and data properties: */
     static $meta_data = array(
         self::SYSTEM_NAME => array(

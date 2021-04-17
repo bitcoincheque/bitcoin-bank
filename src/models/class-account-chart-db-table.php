@@ -57,6 +57,7 @@ class Account_Chart_Db_Table extends Active_Record
     const SUB_TYPE_BALANCE_ASSET_CHEQUE_RECEIVABLE = 103;
     const SUB_TYPE_BALANCE_ASSET_RECEIVABLE = 104;
     const SUB_TYPE_BALANCE_ASSET_INVESTMENT = 105;
+    const SUB_TYPE_BALANCE_ASSET_CLIENT_CREDIT = 106;
 
     const MAIN_TYPE_BALANCE_LIABILITIES = 2;
     const SUB_TYPE_BALANCE_LIABILITIES_CLIENT_SAVINGS = 201;
@@ -174,6 +175,7 @@ class Account_Chart_Db_Table extends Active_Record
             case self::SUB_TYPE_BALANCE_ASSET_CHEQUE_RECEIVABLE:
             case self::SUB_TYPE_BALANCE_ASSET_RECEIVABLE:
             case self::SUB_TYPE_BALANCE_ASSET_INVESTMENT:
+            case self::SUB_TYPE_BALANCE_ASSET_CLIENT_CREDIT:
                 $account_type = self::DEBIT_ACCOUNT;
                 break;
 

@@ -26,6 +26,14 @@ class Bank_Installer {
             Account_Chart_Db_Table::GRAND_TOTALS => 0
         ),
         array(
+            Account_Chart_Db_Table::SYSTEM_NAME => Accounting::SYSTEM_NAME_ASSET_CLIENT_CREDIT,
+            Account_Chart_Db_Table::NUMBER => '130',
+            Account_Chart_Db_Table::LABEL => 'Credit given to clients',
+            Account_Chart_Db_Table::MAIN_ACCOUNT_TYPE => Account_Chart_Db_Table::MAIN_TYPE_BALANCE_ASSET,
+            Account_Chart_Db_Table::SUB_ACCOUNT_TYPE => Account_Chart_Db_Table::SUB_TYPE_BALANCE_ASSET_CLIENT_CREDIT,
+            Account_Chart_Db_Table::GRAND_TOTALS => 0
+        ),
+        array(
             Account_Chart_Db_Table::SYSTEM_NAME => Accounting::SYSTEM_NAME_ASSET_INVESTMENT,
             Account_Chart_Db_Table::NUMBER => '150',
             Account_Chart_Db_Table::LABEL => 'Equipment, investments and other assets',
@@ -121,11 +129,17 @@ class Bank_Installer {
 
     static $default_account_defaults = array(
         array(
-            Account_Defaults_Db_Table::SYSTEM_NAME => 'new_client_account',
-            Account_Defaults_Db_Table::LABEL => 'Client account.',
-            Account_Defaults_Db_Table::DESCRIPTION => 'Default accounts for new clients.',
+            Account_Defaults_Db_Table::SYSTEM_NAME => Account_Defaults_Db_Table::DEFAULT_NEW_CLIENT_SAVING_ACCOUNT,
+            Account_Defaults_Db_Table::LABEL => 'Client saving account.',
+            Account_Defaults_Db_Table::DESCRIPTION => 'Default saving accounts for new clients.',
             'account_chart' => 'client_accounts'
-        )
+        ),
+        array(
+            Account_Defaults_Db_Table::SYSTEM_NAME => Account_Defaults_Db_Table::DEFAULT_NEW_CLIENT_CREDIT_ACCOUNT,
+            Account_Defaults_Db_Table::LABEL => 'Client credit account.',
+            Account_Defaults_Db_Table::DESCRIPTION => 'Default credit accounts for new clients.',
+            'account_chart' => Accounting::SYSTEM_NAME_ASSET_CLIENT_CREDIT
+        ),
     );
 
     static $default_system_accounts = array(

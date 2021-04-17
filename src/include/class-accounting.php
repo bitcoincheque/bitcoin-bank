@@ -11,6 +11,7 @@ class Accounting
     /* Balance Accounts - Assets */
     const SYSTEM_NAME_ASSET_COLD_VAULT = 'cold_vault';
     const SYSTEM_NAME_ASSET_HOT_VAULT = 'hot_vault';
+    const SYSTEM_NAME_ASSET_CLIENT_CREDIT = 'client_credit';
     const SYSTEM_NAME_ASSET_INVESTMENT = 'investment';
 
     /* Balance Accounts - Liabilities */
@@ -131,6 +132,15 @@ class Accounting
     {
         $account_defaults_data = new Account_Defaults_Db_Table();
         $account_defaults_data->load_data(Account_Defaults_Db_Table::SYSTEM_NAME, Account_Defaults_Db_Table::DEFAULT_NEW_CLIENT_SAVING_ACCOUNT);
+        $account_chart_id = $account_defaults_data->get_data(Account_Defaults_Db_Table::ACCOUNT_CHART_ID);
+
+        return self::create_account( $client_id, $account_chart_id, $label );
+    }
+
+    static public function create_client_credit_account($client_id, $label)
+    {
+        $account_defaults_data = new Account_Defaults_Db_Table();
+        $account_defaults_data->load_data(Account_Defaults_Db_Table::SYSTEM_NAME, Account_Defaults_Db_Table::DEFAULT_NEW_CLIENT_CREDIT_ACCOUNT);
         $account_chart_id = $account_defaults_data->get_data(Account_Defaults_Db_Table::ACCOUNT_CHART_ID);
 
         return self::create_account( $client_id, $account_chart_id, $label );
@@ -377,30 +387,27 @@ class Accounting
             and (gettype($amount) == 'integer')
             and ($amount > 0))
         {
+            if($debit_account_id != $credit_account_id) {
+                if (self::account_debit($debit_account_id, $amount, $overdraft_allowed) !== false) {
+                    if (self::account_credit($credit_account_id, $amount) !== false) {
 
-            if (self::account_debit($debit_account_id, $amount, $overdraft_allowed) !== false)
-            {
-                if (self::account_credit($credit_account_id, $amount) !== false)
-                {
-
-                    $transaction = new Transactions_Db_Table();
-                    $transaction->set_data(Transactions_Db_Table::TIME_STAMP, $timestamp);
-                    $transaction->set_data(Transactions_Db_Table::CREDIT_ACCOUNT_ID, $credit_account_id);
-                    $transaction->set_data(Transactions_Db_Table::DEBIT_ACCOUNT_ID, $debit_account_id);
-                    $transaction->set_data(Transactions_Db_Table::AMOUNT, $amount);
-                    $transaction->set_data(Transactions_Db_Table::TRANSACTION_TYPE, $transaction_type);
-                    $transaction->set_data(Transactions_Db_Table::REFERENCE_ID, $ref);
-                    $transaction->save_data();
-                    $transaction_id = $transaction->get_data(Transactions_Db_Table::PRIMARY_KEY);
-                    return $transaction_id;
-                }
-                else
-                {
-                    /* Could not credit account, revers debit. */
-                    if (self::account_credit($debit_account_id, $amount) !== false)
-                    {
-                        /* Could not reverse debit. */
-                        Debug_Logger::write_debug_error('Error in transaction', $debit_account_id, $amount);
+                        $transaction = new Transactions_Db_Table();
+                        $transaction->set_data(Transactions_Db_Table::TIME_STAMP, $timestamp);
+                        $transaction->set_data(Transactions_Db_Table::CREDIT_ACCOUNT_ID, $credit_account_id);
+                        $transaction->set_data(Transactions_Db_Table::DEBIT_ACCOUNT_ID, $debit_account_id);
+                        $transaction->set_data(Transactions_Db_Table::AMOUNT, $amount);
+                        $transaction->set_data(Transactions_Db_Table::TRANSACTION_TYPE, $transaction_type);
+                        $transaction->set_data(Transactions_Db_Table::REFERENCE_ID, $ref);
+                        $transaction->save_data();
+                        $transaction_id = $transaction->get_data(Transactions_Db_Table::PRIMARY_KEY);
+                        return $transaction_id;
+                    }
+                    else {
+                        /* Could not credit account, revers debit. */
+                        if (self::account_credit($debit_account_id, $amount) !== false) {
+                            /* Could not reverse debit. */
+                            Debug_Logger::write_debug_error('Error in transaction', $debit_account_id, $amount);
+                        }
                     }
                 }
             }
