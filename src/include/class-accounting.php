@@ -32,7 +32,29 @@ class Accounting
     {
         $wp_user_id = $user->ID;
         $client_id = self::get_client_id($wp_user_id);
-        self::get_client_default_account($client_id, $user_login);
+        if($client_id === false) {
+            $user = get_user_by( 'id', $wp_user_id ); // 54 is a user ID
+            $wp_user_login = $user->user_login;
+            $client_id = self::create_client( $wp_user_id, $wp_user_login );
+        }
+
+        $account_id = self::get_client_default_account( $client_id );
+        if($account_id === false) {
+            if(!$user_login) {
+                $wp_user = wp_get_current_user();
+                $user_login = $wp_user->user_login;
+            }
+            $label = 'Saving account for ' . $user_login;
+            $saving_account = self::create_client_saving_account( $client_id, $label );
+
+            $give_credit = Settings_Client_Options::get_options(Settings_Client_Options::SIGN_UP_CREDIT);
+            if($give_credit) {
+                $label = 'Credit account for ' . $user_login;
+                $credit_account = self::create_client_credit_account( $client_id, $label );
+                $credit_amount = Settings_Client_Options::get_options(Settings_Client_Options::SIGN_UP_CREDIT_AMOUNT);
+                self::make_account_transfer($credit_account, $saving_account, $credit_amount, null,true);
+            }
+        }
     }
 
     static public function get_client_id($wp_user_id = null)
@@ -46,19 +68,15 @@ class Accounting
 
         $client_data = new Clients_Db_Table();
         $result = $client_data->load_data(Clients_Db_Table::WP_USER_ID, $wp_user_id);
-        if ($result === 1)
-        {
-            $client_id = $client_data->get_data(Clients_Db_Table::PRIMARY_KEY);
-        }
-        else if ( $result === false )
-        {
-            $user = get_user_by( 'id', $wp_user_id ); // 54 is a user ID
-            $wp_user_login = $user->user_login;
-            $client_id = self::create_client( $wp_user_id, $wp_user_login );
-        }
-        else
-        {
-            Debug_Logger::write_debug_error( 'Database table ' . $client_data::TABLE_NAME . ' has multiple wp_users ' . $wp_user_id . '.');
+        if (is_integer($result)) {
+            if($result >= 1)
+            {
+                $client_id = $client_data->get_data(Clients_Db_Table::PRIMARY_KEY);
+            }
+            if($result > 1)
+            {
+                Debug_Logger::write_debug_error( 'Database table ' . $client_data::TABLE_NAME . ' has multiple wp_users ' . $wp_user_id . '.');
+            }
         }
 
         return $client_id;
@@ -74,7 +92,7 @@ class Accounting
         return $client_id;
     }
 
-    static public function get_client_default_account( $client_id, $username=null )
+    static public function get_client_default_account( $client_id )
     {
         $account_id = false;
         if( $client_id )
@@ -83,15 +101,6 @@ class Accounting
             if ($account_data->load_data(Accounts_Db_Table::CLIENT_ID, $client_id))
             {
                 $account_id = $account_data->get_data(Accounts_Db_Table::PRIMARY_KEY);
-            }
-
-            if( ! $account_id ) {
-                if(!$username) {
-                    $wp_user = wp_get_current_user();
-                    $username = $wp_user->user_login;
-                }
-                $label = 'Saving account';
-                self::create_client_account($client_id, $label);
             }
         }
         return $account_id;
@@ -118,14 +127,13 @@ class Accounting
         return $client_data->create_client( time(), $wp_user_id, $money_address );
     }
 
-    static public function create_client_account($client_id, $label)
+    static public function create_client_saving_account($client_id, $label)
     {
         $account_defaults_data = new Account_Defaults_Db_Table();
-        $account_defaults_data->load_data(Account_Defaults_Db_Table::SYSTEM_NAME, 'new_client_account');
+        $account_defaults_data->load_data(Account_Defaults_Db_Table::SYSTEM_NAME, Account_Defaults_Db_Table::DEFAULT_NEW_CLIENT_SAVING_ACCOUNT);
         $account_chart_id = $account_defaults_data->get_data(Account_Defaults_Db_Table::ACCOUNT_CHART_ID);
 
-        self::create_account( $client_id, $account_chart_id, $label );
-        return $client_id;
+        return self::create_account( $client_id, $account_chart_id, $label );
     }
 
     static public function get_bank_owner_client_id() {
