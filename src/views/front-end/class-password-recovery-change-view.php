@@ -54,23 +54,13 @@ class Password_Recovery_Change_View extends Front_Page_View {
 	 * @param $controller
 	 */
 	public function __construct( $id, $controller ) {
-		parent::__construct( $id, $controller );
-
 		$this->status_bar_header = new Status_Bar();
-		$this->register_component( 'status_bar_header', $this->status_bar_header );
-
 		$this->password1 = new Text_Line( esc_html__( 'New password:', 'bitcoin-bank' ), '', 'password', array( 'type' => 'password' ) );
-		$this->register_component( 'password1', $this->password1 );
-
 		$this->password2 = new Text_Line( esc_html__( 'Confirm password:', 'bitcoin-bank' ), '', 'confirm_password', array( 'type' => 'password' ) );
-		$this->register_component( 'password2', $this->password2 );
-
 		/* translators: Button label. */
 		$this->button_save_password = new Push_Button( esc_html__( 'Save changes', 'bitcoin-bank' ), Push_Button::METHOD_POST );
-		$this->register_component( 'button_save_password', $this->button_save_password );
-
 		$this->status_bar_footer = new Status_Bar();
-		$this->register_component( 'status_bar_footer', $this->status_bar_footer );
+		parent::__construct( $id, $controller );
 	}
 
 	public function create_content( $parameters = null ) {

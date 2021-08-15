@@ -56,23 +56,12 @@ class Cheque_Receive_View extends Front_Page_View {
     protected $cheque_state = null;
 
     public function __construct( $id, $controller ) {
-        parent::__construct( $id, $controller );
-
         $this->status_bar = new Status_Bar();
-        $this->register_component( 'status_bar', $this->status_bar );
-
-        //$this->access_code = new text_Line( esc_html__( 'Access Code:', 'bitcoin-bank' ), '', 'access_code' );
-        //$this->register_component( 'access_code', $this->access_code );
-
         /* translators: Button label. */
         $this->button_claim_cheque = new Push_Button( esc_html__( 'Accept cheque', 'bitcoin-bank' ) );
-        $this->register_component( 'button_claim_cheque', $this->button_claim_cheque );
-
         $this->button_reject_cheque = new Push_Button( esc_html__( 'Reject cheque', 'bitcoin-bank' ) );
-        $this->register_component( 'button_reject_cheque', $this->button_reject_cheque );
-
         $this->status_bar_footer = new Status_Bar();
-        $this->register_component( 'status_bar_footer', $this->status_bar_footer );
+		parent::__construct( $id, $controller );
     }
 
     public function set_valuesxxx( $values ) {

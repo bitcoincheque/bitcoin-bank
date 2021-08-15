@@ -55,36 +55,25 @@ class Register_User_Data_View extends Front_Page_View {
 	 * @param $controller
 	 */
 	public function __construct( $id, $controller ) {
-		parent::__construct( $id, $controller );
-
 		$this->status_bar_header = new Status_Bar();
-		$this->register_component( 'status_bar_header', $this->status_bar_header );
-
 		$this->username = new Text_Line( esc_html__( 'Username:', 'bitcoin-bank' ), '', 'username' );
-		$this->register_component( 'username', $this->username );
-
 		$this->password = new Text_Line( esc_html__( 'Password:', 'bitcoin-bank' ), '', 'password', array( 'type' => 'password' ) );
-		$this->register_component( 'password', $this->password );
 
 		$register_option = get_option( Settings_Form_Options::OPTION_NAME );
 		if ( $register_option[ Settings_Form_Options::REGISTER_COLLECT_FIRST_NAME ] ) {
 			/* translators: A person's first name. */
 			$this->first_name = new Text_Line( esc_html__( 'First name:', 'bitcoin-bank' ), '', 'first_name' );
-			$this->register_component( 'first_name', $this->first_name );
 		}
 
 		if ( $register_option[ Settings_Form_Options::REGISTER_COLLECT_LAST_NAME ] ) {
 			/* translators: A person's last name. */
 			$this->last_name = new Text_Line( esc_html__( 'Last name:', 'bitcoin-bank' ), '', 'last_name' );
-			$this->register_component( 'last_name', $this->last_name );
 		}
 
 		/* translators: Button label, start register as new user. */
 		$this->button_register = new Push_Button( esc_html__( 'Register', 'bitcoin-bank' ), Push_Button::METHOD_POST );
-		$this->register_component( 'button_register', $this->button_register );
-
 		$this->status_bar_footer = new Status_Bar();
-		$this->register_component( 'status_bar_footer', $this->status_bar_footer );
+		parent::__construct( $id, $controller );
 	}
 
 	public function create_content( $parameters = null ) {

@@ -29,7 +29,12 @@ use WP_PluginFramework\HtmlComponents\Text_Line;
 use WP_PluginFramework\HtmlComponents\Push_Button;
 use WP_PluginFramework\HtmlComponents\Status_Bar;
 
-class Password_Change_View extends Front_Page_View {
+/**
+ * Summary.
+ *
+ * Description.
+ */
+class Password_Recovery_Change_View extends Front_Page_View {
 
 	/** @var Status_Bar */
 	public $status_bar_header;
@@ -43,32 +48,23 @@ class Password_Change_View extends Front_Page_View {
 	public $status_bar_footer;
 
 	/**
-	 * Password_Change_View constructor.
+	 * Password_Recovery_Change_View constructor.
 	 *
 	 * @param $id
 	 * @param $controller
 	 */
 	public function __construct( $id, $controller ) {
-		parent::__construct( $id, $controller );
-
 		$this->status_bar_header = new Status_Bar();
-		$this->register_component( 'status_bar_header', $this->status_bar_header );
-
-		$this->password1 =  new Text_Line( esc_html__( 'New password:', 'bitcoin-bank' ), '', 'password', array( 'type' => 'password' ) );
-		$this->register_component( 'password1', $this->password1 );
-
+		$this->password1 = new Text_Line( esc_html__( 'New password:', 'bitcoin-bank' ), '', 'password', array( 'type' => 'password' ) );
 		$this->password2 = new Text_Line( esc_html__( 'Confirm password:', 'bitcoin-bank' ), '', 'confirm_password', array( 'type' => 'password' ) );
-		$this->register_component( 'password2', $this->password2 );
-
 		/* translators: Button label. */
-		$this->button_save_password = new Push_Button( esc_html__( 'Save changes', 'bitcoin-bank' ) );
-		$this->register_component( 'button_save_password', $this->button_save_password );
-
+		$this->button_save_password = new Push_Button( esc_html__( 'Save changes', 'bitcoin-bank' ), Push_Button::METHOD_POST );
 		$this->status_bar_footer = new Status_Bar();
-		$this->register_component( 'status_bar_footer', $this->status_bar_footer );
+		parent::__construct( $id, $controller );
 	}
 
 	public function create_content( $parameters = null ) {
+		$this->set_method( self::SEND_METHOD_POST );
 		$this->add_header( 'status_bar_header', $this->status_bar_header );
 		$this->add_form_input( 'password1', $this->password1 );
 		$this->add_form_input( 'password2', $this->password2 );

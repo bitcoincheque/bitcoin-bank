@@ -29,6 +29,11 @@ use WP_PluginFramework\Views\Admin_Std_View;
 use WP_PluginFramework\HtmlComponents\Check_Box;
 use WP_PluginFramework\HtmlComponents\Push_Button;
 use WP_PluginFramework\HtmlComponents\Text_Box;
+use WP_PluginFramework\HtmlComponents\Grid;
+use WP_PluginFramework\HtmlElements\Label;
+use WP_PluginFramework\HtmlElements\P;
+use WP_PluginFramework\HtmlElements\H;
+use WP_PluginFramework\HtmlElements\Hr;
 
 /**
  * Summary.
@@ -56,67 +61,75 @@ class Admin_Access_View extends Admin_Std_View {
 	 * @param $controller
 	 */
 	public function __construct( $id, $controller ) {
-		parent::__construct( $id, $controller );
-
-		$this->google_read = new Check_Box();
-		$this->register_component( 'google_read', $this->google_read );
-
-		$this->approve_new_users = new Check_Box();
-		$this->register_component( 'approve_new_users', $this->approve_new_users );
-
+		$this->google_read = new Check_Box(esc_html__( 'Visitors from search engines like Google can read protected content without login.', 'bitcoin-bank' ));
+		$this->approve_new_users = new Check_Box(esc_html__( 'All new users must be approved.', 'bitcoin-bank' ));
 		$this->approve_proxy = new Text_Box();
-		$this->register_component( 'approve_proxy', $this->approve_proxy );
-
 		/* translators: Button label */
 		$this->std_submit = new Push_Button( esc_html__( 'Save changes', 'bitcoin-bank' ) );
-		$this->register_component( 'std_submit', $this->std_submit );
+		$this->std_submit->set_primary();
+		parent::__construct( $id, $controller );
 	}
 
 	/**
 	 * @param null $parameters
 	 */
 	public function create_content( $parameters = null ) {
-		$category = array(
-			'name'   => 'seo',
-			'header' => esc_html__( 'Search Engine settings', 'bitcoin-bank' ),
+		/* translators: Admin panel sub-headline */
+		$this->add_content(new H(2, esc_html__( 'Search Engine settings', 'bitcoin-bank' )));
+
+		$grid = new Grid(null, array('class' => 'form-table'));
+
+		$grid->add_row();
+		$grid->add_cell_header(
+			new Label( esc_html__( 'Search engine access:', 'bitcoin-bank' ),
+				array( 'for' => 'google_read' ))
 		);
-		$this->add_input_form_category( $category );
-
-		$category = array(
-			'name'        => 'user_approve',
-			'header'      => esc_html__( 'Approve new users', 'bitcoin-bank' ),
-			'description' => esc_html__( 'Approve new user before membership.', 'bitcoin-bank' ),
+		$cell = array(
+			$this->google_read,
+			new P(esc_html__( 'This will also allow search engines to read and index your entire page and could improve your ratings on searches.', 'bitcoin-bank' ))
 		);
-		$this->add_input_form_category( $category );
+		$grid->add_cell( $cell );
 
-		$this->google_read->set_property( 'label', esc_html__( 'Search engine access:', 'bitcoin-bank' ) );
-		$items = array();
-		$items[ Settings_Access_Options::GOOGLE_READ ] = esc_html__( 'Visitors from search engines like Google can read protected content without login.', 'bitcoin-bank' );
-		$this->google_read->set_property( 'items', $items );
-		$this->google_read->set_property( 'description', esc_html__( 'This will also allow search engines to read and index your entire page and could improve your ratings on searches.', 'bitcoin-bank' ) );
-		$this->google_read->set_property( 'category', 'seo' );
+		$this->add_content($grid);
 
-		$this->approve_new_users->set_property( 'label', esc_html__( 'Approve new users:', 'bitcoin-bank' ) );
-		$items2 = array();
-		$items2[ Settings_Access_Options::APPROVE_NEW_USERS ] = esc_html__( 'All new users must be approved.', 'bitcoin-bank' );
-		$this->approve_new_users->set_property( 'items', $items2 );
-		$this->approve_new_users->set_property( 'description', esc_html__( 'Pending approval are listed in the Registrations page', 'bitcoin-bank' ) );
-		$this->approve_new_users->set_property( 'category', 'user_approve' );
+		$p_attributes = array('class' => 'wpf-table-placeholder submit');
+		$p = new P($this->std_submit, $p_attributes);
+		$this->add_content($p);
 
-		$this->approve_proxy->set_property( 'label', esc_html__( 'Users with approval rights:', 'bitcoin-bank' ) );
-		$registration_link = '<a href="">Registration</a>';
-		$this->approve_proxy->set_property( 'description', esc_html__( 'List of user who can approve new users. One username per line. These user can access the Registration page. Leave blank to restrict approval to site admin.', 'bitcoin-bank' ) );
-		$this->approve_proxy->set_property( 'category', 'user_approve' );
+		$this->add_content(new Hr());
+		/* translators: Admin panel sub-headline */
+		$this->add_content(new H(2, esc_html__( 'Approve new users', 'bitcoin-bank' )));
+		$this->add_content(new P(esc_html__( 'Approve new user before membership.', 'bitcoin-bank' )));
 
-		$this->add_form_input( 'google_read', $this->google_read );
+		$grid = new Grid(null, array('class' => 'form-table'));
 
-		$this->add_form_input( 'approve_new_users', $this->approve_new_users );
+		$grid->add_row();
+		$grid->add_cell_header(
+			new Label( esc_html__( 'Approve new users:', 'bitcoin-bank' ),
+				array( 'for' => 'approve_new_users' ))
+		);
+		$cell = array(
+			$this->approve_new_users,
+			new P(esc_html__( 'Pending approval are listed in the Registrations page', 'bitcoin-bank' ))
+		);
+		$grid->add_cell( $cell );
 
-		$this->add_form_input( 'approve_proxy', $this->approve_proxy );
+		$grid->add_row();
+		$grid->add_cell_header(
+			new Label( esc_html__( 'Users with approval rights:', 'bitcoin-bank' ),
+				array( 'for' => 'approve_proxy' ))
+		);
+		$cell = array(
+			$this->approve_proxy,
+			new P(esc_html__( 'List of user who can approve new users. One username per line. These user can access the Registration page. Leave blank to restrict approval to site admin.', 'bitcoin-bank' ))
+		);
+		$grid->add_cell( $cell );
 
-		$this->add_button( 'std_submit', $this->std_submit );
+		$this->add_content($grid);
 
-		$this->std_submit->set_primary( true );
+		$p_attributes = array('class' => 'wpf-table-placeholder submit');
+		$p = new P($this->std_submit, $p_attributes);
+		$this->add_content($p);
 
 		parent::create_content( $parameters );
 	}

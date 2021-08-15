@@ -45,10 +45,8 @@ class Cheque_Sent_Receipt_View extends Std_View {
     public $status_bar;
 
     public function __construct( $id, $controller ) {
-        parent::__construct($id, $controller);
-
         $this->status_bar = new Status_Bar();
-        $this->register_component( 'status_bar', $this->status_bar );
+		parent::__construct($id, $controller);
     }
 
     public function set_values( $values ) {

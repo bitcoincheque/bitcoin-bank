@@ -48,18 +48,12 @@ class Transaction_List_View extends Front_Page_View {
 	 * @param $controller
 	 */
 	public function __construct( $id, $controller ) {
-			parent::__construct( $id, $controller );
-
 		$prop['readonly'] = true;
 		$this->transaction_list = new Text_Line( esc_html__( 'Account', 'bitcoin-bank' ), '', 'user-name', $prop );
-		$this->register_component( 'transaction_list',  $this->transaction_list);
-
 		/* translators: Button label. */
 		$this->std_submit = new Push_Button( esc_html__( 'Load Transaction', 'bitcoin-bank' ) );
-		$this->register_component( 'std_submit', $this->std_submit );
-
 		$this->status_bar_footer = new Status_Bar();
-		$this->register_component( 'status_bar_footer', $this->status_bar_footer );
+		parent::__construct( $id, $controller );
 	}
 
 	/**

@@ -35,13 +35,13 @@ class Profile_View extends Front_Page_View {
 	/** @var Status_Bar */
 	public $status_bar_header;
 	/** @var Text_Line */
-	public $text_user_login;
+	public $user_login;
 	/** @var Text_Line */
-	public $text_first_name;
+	public $first_name;
 	/** @var Text_Line */
-	public $text_last_name;
+	public $last_name;
 	/** @var Text_Line */
-	public $text_email;
+	public $user_email;
 	/** @var Push_Button */
 	public $std_submit;
 	/** @var Link */
@@ -56,45 +56,32 @@ class Profile_View extends Front_Page_View {
 	 * @param $controller
 	 */
 	public function __construct( $id, $controller ) {
-		parent::__construct( $id, $controller );
-
+		$this->status_bar_header = new Status_Bar();
 		$prop['readonly'] = true;
-		$this->text_user_login = new Text_Line( esc_html__( 'Username', 'bitcoin-bank' ), '', 'user_login', $prop );
-		$this->register_component( 'user_login',  $this->text_user_login);
-
-		$this->text_first_name = new Text_Line( esc_html__( 'First name', 'bitcoin-bank' ), '', 'first_name' );
-		$this->register_component( 'first_name', $this->text_first_name);
-
-		$this->text_last_name = new Text_Line( esc_html__( 'Last name', 'bitcoin-bank' ), '', 'last_name' );
-		$this->register_component(  'last_name', $this->text_last_name);
-
-		$this->text_email = new Text_Line( esc_html__( 'E-mail', 'bitcoin-bank' ), '', 'user_email' );
-		$this->register_component( 'user_email',  $this->text_email);
-
+		$this->user_login = new Text_Line( esc_html__( 'Username', 'bitcoin-bank' ), '', 'user_login', $prop );
+		$this->first_name = new Text_Line( esc_html__( 'First name', 'bitcoin-bank' ), '', 'first_name' );
+		$this->last_name = new Text_Line( esc_html__( 'Last name', 'bitcoin-bank' ), '', 'last_name' );
+		$this->user_email = new Text_Line( esc_html__( 'E-mail', 'bitcoin-bank' ), '', 'user_email' );
 		/* translators: Button label. */
 		$this->std_submit = new Push_Button( esc_html__( 'Save changes', 'bitcoin-bank' ) );
-		$this->register_component( 'std_submit', $this->std_submit );
-
 		$this->status_bar_footer = new Status_Bar();
-		$this->register_component( 'status_bar_footer', $this->status_bar_footer );
+		parent::__construct( $id, $controller );
 	}
 
 	/**
 	 * @param null $parameters
 	 */
 	public function create_content( $parameters = null ) {
-		$this->text_user_login->set_property( 'description', esc_html__( 'Usernames cannot be changed.', 'bitcoin-bank' ) );
-
-		$this->status_bar_header = new Status_Bar();
 		$this->add_header('status_bar_header', $this->status_bar_header);
 
-		$this->add_form_input( 'text_user_login',  $this->text_user_login);
+		$this->user_login->set_property( 'description', esc_html__( 'Usernames cannot be changed.', 'bitcoin-bank' ) );
+		$this->add_form_input( 'text_user_login',  $this->user_login);
 
-		$this->add_form_input( 'text_first_name', $this->text_first_name);
+		$this->add_form_input( 'text_first_name', $this->first_name);
 
-		$this->add_form_input(  'text_last_name', $this->text_last_name);
+		$this->add_form_input(  'text_last_name', $this->last_name);
 
-		$this->add_form_input( 'text_email',  $this->text_email);
+		$this->add_form_input( 'text_email',  $this->user_email);
 
 		$this->add_button( 'std_submit', $this->std_submit );
 
@@ -104,7 +91,7 @@ class Profile_View extends Front_Page_View {
 		$this->link_change_password = new Link( $lost_password_url, esc_html__( 'Change password', 'bitcoin-bank' ) );
 		$this->add_footer( 'link_change_password', $this->link_change_password );
 
-		$this->add_footer( 'status_bar_footer', $this->status_bar_footer );
+		$this->add_footer( 'std_status_bar', $this->status_bar_footer );
 
 		parent::create_content( $parameters );
 	}

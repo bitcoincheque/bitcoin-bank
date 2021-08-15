@@ -60,14 +60,16 @@ class Registration_View extends Front_Page_View {
 	public function __construct( $id, $controller ) {
 		$this->status_bar_header = new Status_Bar();
 		$this->email = new Text_Line( esc_html__( 'E-mail address:', 'bitcoin-bank' ), '', 'email' );
+
 		$design_options = get_option( Settings_Form_Options::OPTION_NAME );
 		if ( $design_options[ Settings_Form_Options::REGISTER_MUST_ACCEPT_TERMS ] ) {
 			$this->accept_terms = $this->make_terms_checkbox();
 		}
+
 		/* translators: Button label, start register as new user. */
 		$this->button_start_registration = new Push_Button( esc_html__( 'Register', 'bitcoin-bank' ) );
 		$this->status_bar_footer = new Status_Bar();
-        parent::__construct( $id, $controller );
+		parent::__construct( $id, $controller );
 	}
 
 	public function create_content( $parameters = null ) {

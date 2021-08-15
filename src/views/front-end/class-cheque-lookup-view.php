@@ -55,23 +55,13 @@ class Cheque_Lookup_View extends Front_Page_View {
      * @param $controller
      */
     public function __construct( $id, $controller ) {
-        parent::__construct( $id, $controller );
-
         $this->status_bar_header = new Status_Bar();
-        $this->register_component( 'status_bar_header', $this->status_bar_header );
-
         $this->cheque_id = new text_Line( esc_html__( 'Cheque Serial Number (S/N):', 'bitcoin-bank' ), '', 'cheque_id' );
-        $this->register_component( 'cheque_id', $this->cheque_id );
-
         $this->access_code = new text_Line( esc_html__( 'Access Code:', 'bitcoin-bank' ), '', 'access_code' );
-        $this->register_component( 'access_code', $this->access_code );
-
         /* translators: Button label. */
         $this->button_lookup_cheque = new Push_Button( esc_html__( 'Look up', 'bitcoin-bank' ) );
-        $this->register_component( 'button_lookup_cheque', $this->button_lookup_cheque );
-
         $this->status_bar_footer = new Status_Bar();
-        $this->register_component( 'status_bar_footer', $this->status_bar_footer );
+		parent::__construct( $id, $controller );
     }
 
     public function create_content( $parameters = null ) {

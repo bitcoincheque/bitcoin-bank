@@ -55,20 +55,12 @@ class Password_Recovery_View extends Front_Page_View {
 	 * @param $controller
 	 */
 	public function __construct( $id, $controller ) {
-		parent::__construct( $id, $controller );
-
 		$this->status_bar_header = new Status_Bar();
-		$this->register_component( 'status_bar_header', $this->status_bar_header );
-
-		$this->email = new text_Line( esc_html__( 'E-mail address:', 'bitcoin-bank' ), '', 'email' );
-		$this->register_component( 'email', $this->email );
-
+		$this->email = new text_Line( null, '', 'email' );
 		/* translators: Button label. */
 		$this->button_send_password = new Push_Button( esc_html__( 'Send e-mail', 'bitcoin-bank' ) );
-		$this->register_component( 'button_send_password', $this->button_send_password );
-
 		$this->status_bar_footer = new Status_Bar();
-		$this->register_component( 'status_bar_footer', $this->status_bar_footer );
+		parent::__construct( $id, $controller );
 	}
 
 	public function create_content( $parameters = null ) {
@@ -77,7 +69,11 @@ class Password_Recovery_View extends Front_Page_View {
 		$this->header = new P( esc_html__( 'Enter your e-mail and we will send your username and password reset link.', 'bitcoin-bank' ));
 		$this->add_header( 'header', $this->header );
 
-		$this->add_form_input( 'email', $this->email );
+		$this->add_form_input(
+			'email',
+			$this->email,
+			esc_html__( 'E-mail address:', 'bitcoin-bank' )
+		);
 
 		$this->add_button( 'button_send_password', $this->button_send_password );
 

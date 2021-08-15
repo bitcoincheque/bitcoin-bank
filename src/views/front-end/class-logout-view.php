@@ -52,16 +52,16 @@ class Logout_View extends Front_Page_View {
 	 */
 	public function __construct( $id, $controller ) {
 		/* translators: Button label. */
-        $this->status_bar_header = new Status_Bar();
 		$this->button_logout = new Push_Button( esc_html__( 'Log out', 'bitcoin-bank' ), Push_Button::METHOD_POST );
 		$this->status_bar_footer = new Status_Bar();
-        parent::__construct( $id, $controller );
-    }
+		parent::__construct( $id, $controller );
+	}
 
 	public function create_content( $parameters = null ) {
 		$this->set_method( self::SEND_METHOD_POST );
 
-		$this->add_content( $this->status_bar_header );
+		$this->status_bar_header = new Status_Bar();
+		$this->add_header( 'status_bar_header', $this->status_bar_header );
 
 		$message = new P( esc_html__( 'You are now logged in.', 'bitcoin-bank' ) );
 		$message->set_id ('message' );
@@ -76,18 +76,18 @@ class Logout_View extends Front_Page_View {
 		$html = new Html_Text( $msg );
 		$message->add_content( $html );
 
-		$this->add_content( $message );
+		$this->add_header( 'message', $message );
 
-		$this->add_content( $this->button_logout );
+		$this->add_button( 'button_logout', $this->button_logout );
 
 		$links_options = new Settings_Linking_Options();
 		$url           = $links_options->get_complete_link_url( Settings_Linking_Options::PROFILE_PAGE_LINK );
 		/* translators: Link label. */
 		$this->link = new Link( $url, esc_html__( 'Update your profile', 'bitcoin-bank' ) );
-		$this->add_content( $this->link );
+		$this->add_footer( 'link', $this->link );
 
-		$this->add_content( $this->status_bar_footer );
+		$this->add_footer( 'status_bar_footer', $this->status_bar_footer );
 
-        parent::create_content( $parameters );
-    }
+		parent::create_content( $parameters );
+	}
 }

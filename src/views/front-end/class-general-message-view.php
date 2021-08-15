@@ -45,19 +45,14 @@ class General_Message_View extends Front_Page_View {
 	 * @param $controller
 	 */
 	public function __construct( $id, $controller ) {
-		parent::__construct( $id, $controller );
-
 		$this->header = new H( 3 );
 		$this->status_bar_header = new Status_Bar();
 		$this->status_bar_footer = new Status_Bar();
-
-		$this->register_component( 'header', $this->header );
-		$this->register_component( 'status_bar_header', $this->status_bar_header );
-		$this->register_component( 'status_bar_footer', $this->status_bar_footer );
-
+		parent::__construct( $id, $controller );
 	}
 
 	public function create_content( $parameters = null ) {
+		$this->show_form = false;
 		$this->add_header( 'header', $this->header );
 		$this->add_header( 'status_bar_header', $this->status_bar_header );
 		$this->add_footer( 'status_bar_footer', $this->status_bar_footer );

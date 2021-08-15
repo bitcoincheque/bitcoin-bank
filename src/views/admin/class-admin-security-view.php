@@ -28,6 +28,10 @@ defined( 'ABSPATH' ) || exit;
 use WP_PluginFramework\Views\Admin_Std_View;
 use WP_PluginFramework\HtmlComponents\Check_Box;
 use WP_PluginFramework\HtmlComponents\Push_Button;
+use WP_PluginFramework\HtmlComponents\Grid;
+use WP_PluginFramework\HtmlElements\Label;
+use WP_PluginFramework\HtmlElements\P;
+use WP_PluginFramework\HtmlElements\H;
 
 class Admin_Security_View extends Admin_Std_View {
 
@@ -43,29 +47,35 @@ class Admin_Security_View extends Admin_Std_View {
 	 * @param $controller
 	 */
 	public function __construct( $id, $controller ) {
-		parent::__construct( $id, $controller );
-
-		$this->username_not_email = new Check_Box();
-		$this->register_component( 'username_not_email', $this->username_not_email );
-
+		$this->username_not_email = new Check_Box(esc_html__( 'Forbid users to register using their e-mail address as username.', 'bitcoin-bank' ));
 		/* translators: Button label */
 		$this->std_submit = new Push_Button( esc_html__( 'Save changes', 'bitcoin-bank' ) );
-		$this->register_component( 'std_submit', $this->std_submit );
+		$this->std_submit->set_primary();
+		parent::__construct( $id, $controller );
 	}
 
 	/**
 	 * @param null $parameters
 	 */
 	public function create_content( $parameters = null ) {
-		$this->username_not_email->set_property( 'label', esc_html__( 'E-mail as username:', 'bitcoin-bank' ) );
-		$items = array();
-		$items[ Settings_Security_Options::USERNAME_NOT_EMAIL ] = esc_html__( 'Forbid users to register using their e-mail address as username.', 'bitcoin-bank' );
-		$this->username_not_email->set_property( 'items', $items );
-		$this->username_not_email->set_property( 'description', esc_html__( 'If a visitor tries to register using an e-mail address as username, he will be asked to correct it by enter a non-email.', 'bitcoin-bank' ) );
+		$grid = new Grid(null, array('class' => 'form-table'));
 
-		$this->add_form_input( 'username_not_email', $this->username_not_email );
-		$this->add_button( 'std_submit', $this->std_submit );
-		$this->std_submit->set_primary( true );
+		$grid->add_row();
+		$grid->add_cell_header(
+			new Label( esc_html__( 'E-mail as username:', 'bitcoin-bank' ),
+				array( 'for' => 'username_not_email' ))
+		);
+		$cell = array(
+			$this->username_not_email,
+			new P(esc_html__( 'If a visitor tries to register using an e-mail address as username, he will be asked to correct it by enter a non-email.', 'bitcoin-bank' ))
+		);
+		$grid->add_cell( $cell );
+
+		$this->add_content($grid);
+
+		$p_attributes = array('class' => 'wpf-table-placeholder submit');
+		$p = new P($this->std_submit, $p_attributes);
+		$this->add_content($p);
 
 		parent::create_content( $parameters );
 	}
